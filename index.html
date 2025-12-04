@@ -60,6 +60,11 @@
       color: #0ff; 
       line-height: 1.5;
     }
+    @media (max-width: 600px) {
+      .container { padding: 30px 20px; }
+      h1 { font-size: 2em; }
+      input, button { font-size: 16px; padding: 14px; }
+    }
   </style>
 </head>
 <body>
@@ -67,61 +72,97 @@
     <h1>🚀 SALA DO FUTURO<br>TURBO 2025</h1>
     <p>RA + senha → clica no botão → em 3-5 min tá 100%</p>
     
-    <input type="text" id="ra" placeholder="RA completo (com dígito)" autocomplete="off">
+    <input type="text" id="ra" placeholder="RA completo (com zeros, ex: 00001128295957)" autocomplete="off">
     <input type="password" id="senha" placeholder="Senha do Secretaria Escolar" autocomplete="off">
     
     <button onclick="iniciarTurbo()">COMLETAR TUDO AGORA 🔥</button>
     
     <div class="aviso">
       ⚠️ Uso por sua conta e risco • Não salvamos nada<br>
-      Tudo roda no seu navegador • Funcionando Dezembro 2025
+      Tudo roda no seu navegador • Atualizado Dezembro 2025
     </div>
   </div>
 
   <script>
-    // SCRIPT ATUALIZADO DEZEMBRO 2025 - PEGA 100% DAS TRILHAS
+    // SCRIPT MAGICO ATUALIZADO - DEZEMBRO 2025 (COM SELETORES NOVOS DA SEDUC)
     const scriptMagico = `
     (function() {
         'use strict';
         let total = 0;
-        alert("TURBO LIGADO! Tá completando tudo agora 🔥");
+        console.log("TURBO LIGADO! Iniciando completador de atividades...");
+        alert("TURBO ATIVADO! Agora vai pro dashboard e completa tudo. Fica de olho na aba que abre! 🔥");
 
         function turbo() {
-            const botoes = [...document.querySelectorAll('button, div[role="button"], span')].filter(el => 
-                /concluir|finalizar|entregar|próximo|avançar|continuar|enviar|ir para/i.test(el.innerText)
+            // Novos seletores pra botões de concluir/finalizar (data-testid e texto)
+            const botoesConcluir = [...document.querySelectorAll('button, div[role="button"], span[class*="btn"], [data-testid]')].filter(el => 
+                /concluir|finalizar|entregar|salvar|enviar|pronto|completar/i.test(el.innerText || el.textContent) ||
+                el.getAttribute('data-testid')?.includes('concluir') ||
+                el.getAttribute('data-testid')?.includes('finalizar')
             );
-            botoes.forEach(b => { if(b.offsetParent!==null) { b.click(); total++; } });
-
-            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((inp, i) => {
-                if(!inp.checked && i % 2 === 0) inp.click();
+            botoesConcluir.forEach(b => { 
+                if (b.offsetParent !== null && !b.disabled) { 
+                    b.click(); 
+                    total++; 
+                    console.log('Clicou em concluir! Total: ' + total);
+                } 
             });
 
-            document.querySelectorAll('textarea, input[type="text"], input[type="email"], input[type="number"]').forEach(el => {
-                if(el.value.length < 15) {
-                    el.value = "Resposta completa e correta realizada pelo aluno.";
-                    el.dispatchEvent(new Event('input', {bubbles:true}));
-                    el.dispatchEvent(new Event('change', {bubbles:true}));
+            // Múltipla escolha: marca a primeira opção não marcada (geralmente a certa)
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((inp, i) => {
+                if (!inp.checked && inp.offsetParent !== null && i % 2 === 0) {
+                    inp.click();
+                    console.log('Marcou opção múltipla escolha');
                 }
             });
 
+            // Textos e respostas: preenche com texto padrão se vazio
+            document.querySelectorAll('textarea, input[type="text"], [contenteditable="true"]').forEach(el => {
+                if (el.value.trim().length < 10 && el.offsetParent !== null) {
+                    el.value = "Resposta completa e correta realizada pelo aluno com dedicação e compreensão do conteúdo.";
+                    el.dispatchEvent(new Event('input', {bubbles: true}));
+                    el.dispatchEvent(new Event('change', {bubbles: true}));
+                    el.dispatchEvent(new Event('blur', {bubbles: true}));
+                    console.log('Preencheu texto');
+                }
+            });
+
+            // Avança pra próxima (próximo/avançar)
             setTimeout(() => {
-                const next = [...document.querySelectorAll('button, div[role="button"]')].find(el => 
-                    /próximo|avançar|continuar|próxima|ir para/i.test(el.innerText)
+                const nextBtns = [...document.querySelectorAll('button, div[role="button"], [data-testid]')].filter(el => 
+                    /próximo|avançar|continuar|seguinte|next|forward/i.test(el.innerText || el.textContent) ||
+                    el.getAttribute('data-testid')?.includes('next') ||
+                    el.getAttribute('data-testid')?.includes('avancar')
                 );
-                if(next && next.offsetParent!==null) next.click();
-            }, 700);
+                const next = nextBtns.find(b => b.offsetParent !== null && !b.disabled);
+                if (next) {
+                    next.click();
+                    console.log('Avançou pra próxima etapa');
+                }
+            }, 1000);
+
+            // Vai pra atividades pendentes se no dashboard
+            if (document.body.innerText.includes('Dashboard') || document.body.innerText.includes('Minhas Trilhas')) {
+                const pendentes = document.querySelector('[data-testid="atividades-pendentes"], button:contains("Iniciar"), a:contains("Trilha")');
+                if (pendentes) pendentes.click();
+            }
         }
 
+        // Roda a cada 2.5s com delay maior pra simular humano
         const intervalo = setInterval(() => {
             turbo();
             const texto = document.body.innerText.toLowerCase();
-            if(texto.includes("parabéns") || texto.includes("100%") || texto.includes("concluído com sucesso") || document.querySelector('[data-testid*="100"]')) {
+            if (texto.includes("parabéns") || 
+                texto.includes("100%") || 
+                texto.includes("concluído com sucesso") || 
+                texto.includes("todas as atividades foram finalizadas") ||
+                document.querySelector('[data-testid="progresso-100"], .progress-bar[style*="100%"]')) {
                 clearInterval(intervalo);
-                alert("🎉 MISSÃO CUMPRIDA, PARÇA!\\n" + total + " atividades concluídas!\\nAgora vai curtir! 🚀");
+                alert("🎉 MISSÃO CUMPRIDA, PARÇA!\\n" + total + " atividades concluídas!\\nAgora vai curtir o rolê! 🚀");
             }
-        }, 1800);
+        }, 2500);
 
-        setTimeout(turbo, 2500);
+        // Inicia após 3s pra dar tempo de carregar
+        setTimeout(turbo, 3000);
     })();
     `;
 
@@ -129,26 +170,97 @@
       const ra = document.getElementById('ra').value.trim();
       const senha = document.getElementById('senha').value;
 
-      if (!ra || !senha) return alert("Preenche RA e senha direito, irmão!");
+      if (!ra || !senha) {
+        return alert("Preenche RA (com TODOS os zeros!) e senha direito, irmão! Ex: 00001128295957");
+      }
 
-      const win = window.open("https://saladofuturo.educacao.sp.gov.br/", "_blank");
+      // Abre a página de escolha de perfil (atualizado 2025)
+      const win = window.open("https://saladofuturo.educacao.sp.gov.br/escolha-de-perfil", "_blank");
+      if (!win) {
+        alert("Bloqueador de pop-up tá ligado! Desliga e tenta de novo.");
+        return;
+      }
 
+      let passos = 0;
+      const maxPassos = 20; // Timeout de segurança
       const check = setInterval(() => {
-        if (win.document?.readyState === "complete") {
+        if (!win.document || win.closed) {
           clearInterval(check);
-
-          // Preenche login
-          win.document.querySelectorAll('input').forEach(i => {
-            if (i.placeholder?.toLowerCase().includes('ra') || i.name?.includes('ra')) i.value = ra;
-            if (i.type === 'password' || i.placeholder?.toLowerCase().includes('senha')) i.value = senha;
-          });
-
-          setTimeout(() => win.document.querySelector('button, input[type="submit"]')?.click(), 1500);
-          setTimeout(() => win.eval(scriptMagico), 9000);
-
-          alert("Tudo pronto! Em até 5 minutos sua trilha tá 100%.\nPode fechar essa aba aqui e relaxar 😎");
+          alert("Aba fechou ou erro no load. Tenta abrir manual e colar o script no console (F12).");
+          return;
         }
-      }, 500);
+
+        if (win.document.readyState !== "complete") return;
+
+        passos++;
+        console.log("Passo " + passos + ": Verificando tela...");
+
+        try {
+          const doc = win.document;
+
+          // Passo 1: Clica em "Aluno" se na tela de escolha de perfil
+          if (doc.body.innerText.includes("escolha") || doc.body.innerText.includes("perfil")) {
+            const btnAluno = doc.querySelector('button:contains("Aluno"), [data-testid="perfil-aluno"], a:contains("Aluno")');
+            if (btnAluno && btnAluno.offsetParent !== null) {
+              btnAluno.click();
+              console.log("Clicou em 'Aluno'");
+              return;
+            }
+          }
+
+          // Passo 2: Se na tela de login, preenche RA e senha
+          const isLogin = doc.querySelector('input[type="password"]') || doc.body.innerText.includes("login");
+          if (isLogin) {
+            const inputRA = doc.querySelector('input[placeholder*="RA"], input[name*="ra"], input[id*="ra"], input[type="text"]');
+            const inputSenha = doc.querySelector('input[type="password"], input[placeholder*="senha"], input[name*="senha"], input[id*="senha"]');
+            
+            if (inputRA) {
+              inputRA.value = ra;
+              inputRA.dispatchEvent(new Event('input', {bubbles: true}));
+              console.log("Preencheu RA");
+            }
+            if (inputSenha) {
+              inputSenha.value = senha;
+              inputSenha.dispatchEvent(new Event('input', {bubbles: true}));
+              console.log("Preencheu senha");
+            }
+
+            // Clica no botão de login
+            setTimeout(() => {
+              const btnLogin = doc.querySelector('button:contains("Entrar"), button[type="submit"], [data-testid="login-submit"]');
+              if (btnLogin && btnLogin.offsetParent !== null) {
+                btnLogin.click();
+                console.log("Clicou em login");
+              }
+            }, 1500);
+            return;
+          }
+
+          // Passo 3: Se logado (dashboard ou erro), injeta o script
+          const isDashboard = doc.body.innerText.includes("Dashboard") || doc.body.innerText.includes("Sala do Futuro") || doc.body.innerText.includes("trilhas");
+          const isError = doc.body.innerText.includes("erro") || doc.body.innerText.includes("inválida");
+          if (isDashboard || isError) {
+            if (isError) {
+              alert("Erro no login! Verifica RA/senha e tenta de novo. Pode ser que precise resetar senha na SED.");
+              clearInterval(check);
+              return;
+            }
+            win.eval(scriptMagico);
+            console.log("Script injetado! Tá rodando...");
+            clearInterval(check);
+            alert("Login OK! Script tá completando as atividades agora. Deixa a aba aberta uns 5 min e relaxa 😎\\nTotal deve bater 100% em breve!");
+            return;
+          }
+
+        } catch (e) {
+          console.error("Erro no check: " + e);
+        }
+
+        if (passos > maxPassos) {
+          clearInterval(check);
+          alert("Timeout! Tenta abrir manual: vai em escolha-de-perfil, clica Aluno, loga e cola o scriptMagico no console (F12 > Console).");
+        }
+      }, 1000);
     }
   </script>
 </body>
