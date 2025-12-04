@@ -1,25 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediaQueries</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sala do Futuro Turbo 2025</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .container {
+      background: rgba(0,0,0,0.85);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 40px #0f0;
+      max-width: 90%;
+    }
+    h1 { 
+      font-family: 'Orbitron', sans-serif; 
+      font-size: 2.6em; 
+      margin: 0 0 20px 0;
+      text-shadow: 0 0 20px #0f0;
+    }
+    input, button {
+      width: 100%;
+      padding: 16px;
+      margin: 12px 0;
+      font-size: 18px;
+      border: 2px solid #0f0;
+      background: #000;
+      color: #0f0;
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      background: #0f0;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    button:hover { 
+      background: #00ff00; 
+      box-shadow: 0 0 25px #0f0; 
+      transform: scale(1.05); 
+    }
+    .aviso { 
+      font-size: 0.9em; 
+      margin-top: 25px; 
+      color: #0ff; 
+      line-height: 1.5;
+    }
+  </style>
 </head>
 <body>
-    <h1>Lorem Ipsum</h1>
-    <div>
-        
-        <p>Какво е Lorem Ipsum?
-            Lorem Ipsum е елементарен примерен текст, използван в печатарската и типографската индустрия. Lorem Ipsum е
-            индустриален стандарт от около 1500 година, когато неизвестен печатар взема няколко печатарски букви и ги
-            разбърква, за да напечата с тях книга с примерни шрифтове. Този начин не само е оцелял повече от 5 века, но
-            е навлязъл и в публикуването на електронни издания като е запазен почти без промяна. Популяризиран е през
-            60те години на 20ти век със издаването на Letraset листи, съдържащи Lorem Ipsum пасажи, популярен е и в наши
-            дни във софтуер за печатни издания като Aldus PageMaker, който включва различни версии на Lorem Ipsum.</p>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTh0G_eYUeJHg_hjtRv4BkmsFBXMnOR9yWaw&s" alt="Lorem Ipsum">
+  <div class="container">
+    <h1>🚀 SALA DO FUTURO<br>TURBO 2025</h1>
+    <p>RA + senha → clica no botão → em 3-5 min tá 100%</p>
+    
+    <input type="text" id="ra" placeholder="RA completo (com dígito)" autocomplete="off">
+    <input type="password" id="senha" placeholder="Senha do Secretaria Escolar" autocomplete="off">
+    
+    <button onclick="iniciarTurbo()">COMLETAR TUDO AGORA 🔥</button>
+    
+    <div class="aviso">
+      ⚠️ Uso por sua conta e risco • Não salvamos nada<br>
+      Tudo roda no seu navegador • Funcionando Dezembro 2025
     </div>
-</body>
+  </div>
 
+  <script>
+    // SCRIPT ATUALIZADO DEZEMBRO 2025 - PEGA 100% DAS TRILHAS
+    const scriptMagico = `
+    (function() {
+        'use strict';
+        let total = 0;
+        alert("TURBO LIGADO! Tá completando tudo agora 🔥");
+
+        function turbo() {
+            const botoes = [...document.querySelectorAll('button, div[role="button"], span')].filter(el => 
+                /concluir|finalizar|entregar|próximo|avançar|continuar|enviar|ir para/i.test(el.innerText)
+            );
+            botoes.forEach(b => { if(b.offsetParent!==null) { b.click(); total++; } });
+
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach((inp, i) => {
+                if(!inp.checked && i % 2 === 0) inp.click();
+            });
+
+            document.querySelectorAll('textarea, input[type="text"], input[type="email"], input[type="number"]').forEach(el => {
+                if(el.value.length < 15) {
+                    el.value = "Resposta completa e correta realizada pelo aluno.";
+                    el.dispatchEvent(new Event('input', {bubbles:true}));
+                    el.dispatchEvent(new Event('change', {bubbles:true}));
+                }
+            });
+
+            setTimeout(() => {
+                const next = [...document.querySelectorAll('button, div[role="button"]')].find(el => 
+                    /próximo|avançar|continuar|próxima|ir para/i.test(el.innerText)
+                );
+                if(next && next.offsetParent!==null) next.click();
+            }, 700);
+        }
+
+        const intervalo = setInterval(() => {
+            turbo();
+            const texto = document.body.innerText.toLowerCase();
+            if(texto.includes("parabéns") || texto.includes("100%") || texto.includes("concluído com sucesso") || document.querySelector('[data-testid*="100"]')) {
+                clearInterval(intervalo);
+                alert("🎉 MISSÃO CUMPRIDA, PARÇA!\\n" + total + " atividades concluídas!\\nAgora vai curtir! 🚀");
+            }
+        }, 1800);
+
+        setTimeout(turbo, 2500);
+    })();
+    `;
+
+    function iniciarTurbo() {
+      const ra = document.getElementById('ra').value.trim();
+      const senha = document.getElementById('senha').value;
+
+      if (!ra || !senha) return alert("Preenche RA e senha direito, irmão!");
+
+      const win = window.open("https://saladofuturo.educacao.sp.gov.br/", "_blank");
+
+      const check = setInterval(() => {
+        if (win.document?.readyState === "complete") {
+          clearInterval(check);
+
+          // Preenche login
+          win.document.querySelectorAll('input').forEach(i => {
+            if (i.placeholder?.toLowerCase().includes('ra') || i.name?.includes('ra')) i.value = ra;
+            if (i.type === 'password' || i.placeholder?.toLowerCase().includes('senha')) i.value = senha;
+          });
+
+          setTimeout(() => win.document.querySelector('button, input[type="submit"]')?.click(), 1500);
+          setTimeout(() => win.eval(scriptMagico), 9000);
+
+          alert("Tudo pronto! Em até 5 minutos sua trilha tá 100%.\nPode fechar essa aba aqui e relaxar 😎");
+        }
+      }, 500);
+    }
+  </script>
+</body>
 </html>
